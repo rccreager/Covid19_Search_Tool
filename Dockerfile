@@ -7,19 +7,8 @@ ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-RUN mkdir img
-RUN mkdir notebooks
-RUN mkdir src
-RUN mkdir data
-COPY lda.py /lda.py
-COPY img/ /img
-COPY notebooks/ /notebooks
-COPY src/ /src
-COPY data/ /data
+COPY . /
 ADD /data/CORD-19-research-challenge/CORD-19-research-challenge.tar.gz /data/CORD-19-research-challenge/ 
-COPY LICENSE /LICENSE 
-COPY README.md /README.md
-COPY requirements.txt /requirements.txt
 
 RUN pip3 install --upgrade pip 
 RUN pip3 install -r requirements.txt
