@@ -9,7 +9,7 @@ The easiest way to run this package is with Docker.
 1. Install [Docker](https://docs.docker.com/install/)
 2. Pull the Docker image from Docker Hub:
 
-        docker pull rccreager/covid19-search-tool:Covid19_Search_Tool_03-25-20 
+        docker pull rccreager/covid19-search-tool:latest 
 3. Run the Docker image:
 
         docker run -it -p 8888:8888 rccreager/covid19-search-tool:Covid19_Search_Tool_03-25-20 

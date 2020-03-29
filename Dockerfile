@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 RUN apt-get update
-RUN apt-get install -y python3-dev python3-pip python3-venv wget unzip 
+RUN apt-get install -y python3-dev python3-pip python3-venv wget unzip vim 
 
 ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
@@ -12,7 +12,6 @@ ADD /data/CORD-19-research-challenge/CORD-19-research-challenge.tar.gz /data/COR
 
 RUN pip3 install --upgrade pip 
 RUN pip3 install -r requirements.txt
-RUN pip3 install jupyter 
 
 RUN python3 -c "import nltk; nltk.download('punkt')"
 RUN python3 -c "import nltk; nltk.download('stopwords')"
