@@ -11,11 +11,12 @@ RUN mkdir img
 RUN mkdir notebooks
 RUN mkdir src
 RUN mkdir data
+COPY lda.py /lda.py
 COPY img/ /img
 COPY notebooks/ /notebooks
 COPY src/ /src
 COPY data/ /data
-RUN tar -xzf /data/CORD-19-research-challenge/CORD-19-research-challenge.tar.gz 
+RUN tar -xvf /data/CORD-19-research-challenge/CORD-19-research-challenge.tar.gz 
 COPY LICENSE /LICENSE 
 COPY README.md /README.md
 COPY requirements.txt /requirements.txt
