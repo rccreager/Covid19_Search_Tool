@@ -20,10 +20,10 @@ def print_top_words(model, feature_names, n_top_words):
         print(message)
     print()
 
-input_dir = PurePath('./CORD-19-research-challenge')
+input_dir = PurePath('data/CORD-19-research-challenge/')
 list(Path(input_dir).glob('*'))
 
-metadata_path = input_dir / '../metadata.csv'
+metadata_path = input_dir / 'metadata.csv'
 metadata = pd.read_csv(metadata_path,
                                dtype={'Microsoft Academic Paper ID': str,
                                       'pubmed_id': str})
