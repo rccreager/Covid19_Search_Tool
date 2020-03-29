@@ -1,12 +1,6 @@
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 from pathlib import Path, PurePath
 import pandas as pd
-import requests
-from requests.exceptions import HTTPError, ConnectionError
-from rank_bm25 import BM25Okapi
 import nltk
-nltk.download("punkt")
 import re 
 from time import time
 

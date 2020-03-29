@@ -16,7 +16,7 @@ COPY img/ /img
 COPY notebooks/ /notebooks
 COPY src/ /src
 COPY data/ /data
-RUN tar -xvf /data/CORD-19-research-challenge/CORD-19-research-challenge.tar.gz 
+ADD /data/CORD-19-research-challenge/CORD-19-research-challenge.tar.gz /data/CORD-19-research-challenge/ 
 COPY LICENSE /LICENSE 
 COPY README.md /README.md
 COPY requirements.txt /requirements.txt
