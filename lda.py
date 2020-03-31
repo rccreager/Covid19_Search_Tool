@@ -1,6 +1,8 @@
 from pathlib import Path, PurePath
 import pandas as pd
 import nltk
+import os
+import sys
 import re 
 from time import time
 
@@ -11,42 +13,18 @@ from sklearn.pipeline import Pipeline
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer 
 
-from src import nlp
+# Add Covid19_Search_Tool/src to python path
+nb_dir = os.path.split(os.getcwd())[0]
+data_dir = os.path.join(nb_dir,'src')
+if data_dir not in sys.path:
+    sys.path.append(data_dir)
 
-def print_top_words(model, feature_names, n_top_words):
-    for topic_idx, topic in enumerate(model.components_):
-        message = "\nTopic #%d: " % topic_idx
-        message += " ".join([feature_names[i]
-                             for i in topic.argsort()[:-n_top_words - 1:-1]])
-        print(message)
-    print()
+# Import local libraries
+from utils import ResearchPapers
+from nlp import SearchResults, WordTokenIndex, preprocess, get_preprocessed_abstract_text, print_top_words
 
-input_dir = PurePath('data/CORD-19-research-challenge/')
-list(Path(input_dir).glob('*'))
-
-metadata_path = input_dir / 'metadata.csv'
-metadata = pd.read_csv(metadata_path,
-                               dtype={'Microsoft Academic Paper ID': str,
-                                      'pubmed_id': str})
-
-# Set the abstract to the paper title if it is null
-metadata.abstract = metadata.abstract.fillna(metadata.title)
-
-duplicate_paper = ~(metadata.title.isnull() | metadata.abstract.isnull()) & (metadata.duplicated(subset=['title', 'abstract']))
-metadata = metadata[~duplicate_paper].reset_index(drop=True)
-drop_columns = ['authors',
-                'sha',
-                'has_full_text',
-                'full_text_file',
-                'Microsoft Academic Paper ID',
-                'WHO #Covidence', 
-                'pmcid', 
-                'pubmed_id', 
-                'license']
-metadata = metadata.drop(axis=1,labels=drop_columns)
-metadata = metadata.dropna()
+preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
 english_stopwords = list(set(stopwords.words('english')))
-preprocessed = [nlp.preprocess(text) for text in metadata['abstract']]
 
 tf_vectorizer = CountVectorizer(min_df=3, max_df=0.1, stop_words=english_stopwords)
 tf_vectors = tf_vectorizer.fit_transform(preprocessed)

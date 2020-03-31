@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 from rank_bm25 import BM25Okapi
 import numpy as np
+from pathlib import Path, PurePath
 
 
 '''
@@ -51,6 +52,40 @@ def preprocess(text):
     tokens = lemmatize(tokens,lemmatizer)
     return tokens
 
+def get_preprocessed_abstract_text(input_dir_path, 
+                                   file_name,
+                                   drop_columns= ['authors',
+                                                  'sha',
+                                                  'has_full_text',
+                                                  'full_text_file',
+                                                  'Microsoft Academic Paper ID',
+                                                  'WHO #Covidence',
+                                                  'pmcid',
+                                                  'pubmed_id',
+                                                  'license']):
+    input_dir = PurePath('data/CORD-19-research-challenge/') 
+    list(Path(input_dir).glob('*'))
+    metadata_path = input_dir / file_name
+    metadata = pd.read_csv(metadata_path,
+                                   dtype={'Microsoft Academic Paper ID': str,
+                                          'pubmed_id': str})
+    # Set the abstract to the paper title if it is null
+    metadata.abstract = metadata.abstract.fillna(metadata.title)
+    duplicate_paper = ~(metadata.title.isnull() | metadata.abstract.isnull()) & (metadata.duplicated(subset=['title', 'abstract']))
+    metadata = metadata[~duplicate_paper].reset_index(drop=True)
+    metadata = metadata.drop(axis=1,labels=drop_columns)
+    metadata = metadata.dropna()
+    english_stopwords = list(set(stopwords.words('english')))
+    preprocessed = [preprocess(text) for text in metadata['abstract']]
+    return preprocessed
+
+def print_top_words(model, feature_names, n_top_words):
+    for topic_idx, topic in enumerate(model.components_):
+        message = "\nTopic #%d: " % topic_idx
+        message += " ".join([feature_names[i]
+                             for i in topic.argsort()[:-n_top_words - 1:-1]])
+        print(message.encode('utf-8'))
+    print()
 
 class SearchResults:
     
