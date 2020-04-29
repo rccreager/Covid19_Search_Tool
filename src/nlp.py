@@ -48,7 +48,7 @@ def lemmatize(word_list,lemmatizer):
 def preprocess(text):
     t = clean(text)
     tokens = tokenize(t)
-    lemmatizer=WordNetLemmatizer()
+    lemmatizer = WordNetLemmatizer()
     tokens = lemmatize(tokens,lemmatizer)
     return tokens
 
@@ -76,7 +76,7 @@ def get_preprocessed_abstract_text(input_dir_path,
     metadata = metadata.drop(axis=1,labels=drop_columns)
     metadata = metadata.dropna()
     english_stopwords = list(set(stopwords.words('english')))
-    preprocessed = [preprocess(text) for text in metadata['abstract']]
+    preprocessed = [preprocess(text).encode('utf-8') for text in metadata['abstract']]
     return preprocessed
 
 def print_top_words(model, feature_names, n_top_words):

@@ -21,18 +21,13 @@ from tensorflow.keras.utils import Progbar
 
 # Add Covid19_Search_Tool/src to python path
 nb_dir = os.path.split(os.getcwd())[0]
-data_dir = os.path.join(nb_dir,'src')
-if data_dir not in sys.path:
-    sys.path.append(data_dir)
+src_dir = os.path.join(nb_dir,'src')
+if src_dir not in sys.path:
+    sys.path.append(src_dir)
 
 # Import local libraries
 from utils import ResearchPapers
 from nlp import SearchResults, WordTokenIndex, preprocess
-import bert as bert
+from bert import get_bert_vectorizer
 
-# base model dir
-nb_dir = os.path.split(os.getcwd())[0]
-base_dir = os.path.join(nb_dir,'models')
-
-
-
+bert_vectorizer, bert_feature_names = get_bert_vectorizer()

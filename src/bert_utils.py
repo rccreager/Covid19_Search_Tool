@@ -62,10 +62,14 @@ def get_feed_dict(texts, params):
         int(params['max_sequence_length']),
         bert_tokenizer,
         log))
-    target_shape = (len(texts), -1)
+    target_size = len(texts)
+    target_shape = (target_size, -1)
     feed_dict = {}
     for input_name in params['input_names']:
         features_i = np.array([getattr(f, input_name) for f in text_features])
+        if len(features_i) % target_size != 0:
+            num_feature_sets = len(features_i) // target_size
+            features_i = features_i[0: target_size * num_feature_sets - 1]
         features_i = features_i.reshape(target_shape).astype("int32")
         feed_dict[input_name] = features_i
     return feed_dict
@@ -108,6 +112,7 @@ def get_estimator_spec(features, mode, params):
 
 def batch(iterable, n=1):
     l = len(iterable)
+    print(f'iterate {l} over {n}')
     for index in range(0, l, n):
         yield iterable[index : min(index + n, l)]
 
