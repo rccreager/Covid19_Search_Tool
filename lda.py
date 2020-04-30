@@ -12,6 +12,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer 
+from bert_serving.client import BertClient
 
 # Add Covid19_Search_Tool/src to python path
 nb_dir = os.path.split(os.getcwd())[0]
@@ -25,8 +26,8 @@ from nlp import SearchResults, WordTokenIndex, preprocess, get_preprocessed_abst
 from bert import get_bert_vectorizer
 from bert_utils import get_feed_dict
 
-preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv', 128)
-english_stopwords = list(set(stopwords.words('english')))
+preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
+
 
 #tf_vectorizer = CountVectorizer(min_df=3, max_df=0.1, stop_words=english_stopwords)
 #tf_vectors = tf_vectorizer.fit_transform(preprocessed)
@@ -48,28 +49,15 @@ english_stopwords = list(set(stopwords.words('english')))
 #print('Topics from LDA using TF-IDF:')
 #print_top_words(lda_tfidf, tfidf_feature_names, 25)
 
-#bert_vectorizer = get_bert_vectorizer() 
-#bert_vectors = bert_vectorizer(preprocessed)
-batch_size = 256
-num_parallel_calls = 2
-num_clients = num_parallel_calls * 2  # should be at least greater than `num_parallel_calls`
-# start a pool of clients
-bc_clients = [BertClient(port=5555, show_server_config=False) for _ in range(num_clients)]
-def get_encodes(x):
-    # x is `batch_size` of lines, each of which is a json object
-    samples = [json.loads(l) for l in x]
-    text = [s['raw_text'] for s in samples]  # List[List[str]]
-    labels = [s['label'] for s in samples]  # List[str]
-    # get a client from available clients
-    bc_client = bc_clients.pop()
-    features = bc_client.encode(text, is_tokenized=True)
-    # after use, put it back
-    bc_clients.append(bc_client)
-    return features, labels
-bert_vectors = (tf.data.TextLineDataset(preprocessed).batch(batch_size)
-        .map(lambda x: tf.py_func(get_encodes, [x], [tf.float32, tf.string]),  num_parallel_calls=num_parallel_calls)
-        .map(lambda x, y: {'feature': x, 'label': y})
-        .make_one_shot_iterator().get_next())
+preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
+print(preprocessed[0])
+print('getting client')
+with BertClient(ip = '1.2.4.8') as bc:
+    print('encoding')
+    bc.encode(preprocessed, is_tokenized=False)
+print('fetching')
+bert_vectors = bc.fetch_all(sort=True)
+
 lda_bert = LatentDirichletAllocation(n_components = 3, learning_offset = 50., verbose=2)
 t0 = time()
 lda_bert.fit(bert_vectors)

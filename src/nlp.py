@@ -45,12 +45,15 @@ def lemmatize(word_list,lemmatizer):
     lemmatized_output = ' '.join([lemmatizer.lemmatize(w) for w in word_list])
     return lemmatized_output
 
-def preprocess(text):
+def preprocess(text, tokenize_text = False):
     t = clean(text)
-    tokens = tokenize(t)
-    lemmatizer = WordNetLemmatizer()
-    tokens = lemmatize(tokens,lemmatizer)
-    return tokens
+    if (tokenize_text):
+        tokens = tokenize(t)
+        lemmatizer = WordNetLemmatizer()
+        tokens = lemmatize(tokens,lemmatizer)
+        return tokens
+    else:
+        return t
 
 def get_preprocessed_abstract_text(input_dir_path, 
                                    file_name,
@@ -62,7 +65,8 @@ def get_preprocessed_abstract_text(input_dir_path,
                                                   'WHO #Covidence',
                                                   'pmcid',
                                                   'pubmed_id',
-                                                  'license']):
+                                                  'license'],
+                                   tokenize_text = False):
     input_dir = PurePath('data/CORD-19-research-challenge/') 
     list(Path(input_dir).glob('*'))
     metadata_path = input_dir / file_name
@@ -76,7 +80,7 @@ def get_preprocessed_abstract_text(input_dir_path,
     metadata = metadata.drop(axis=1,labels=drop_columns)
     metadata = metadata.dropna()
     english_stopwords = list(set(stopwords.words('english')))
-    preprocessed = [preprocess(text).encode('utf-8') for text in metadata['abstract']]
+    preprocessed = [preprocess(text, tokenize_text) for text in metadata['abstract']]
     return preprocessed
 
 def print_top_words(model, feature_names, n_top_words):

@@ -1,2 +1,17 @@
 start server like so:
-docker run -it -p 1111:5555 -p 2222:5556 --network my-net covid19-search-tool:29apr_1721_bert  2
+
+# keep track of the following:
+## gateway IP address (e.g. 1.2.3.4)
+## subnet mask (e.g. /11)
+## server container ID
+## client container ID
+
+
+docker run -it covid19-search-tool:29apr_1721_bert 2
+docker run -it covid19-search-tool:29apr_1610_main
+
+docker network create my-net --gateway=1.2.3.4 --subnet=1.2.3.4/11
+docker network connect --ip 1.2.4.8 my-net 5b68b9a6f10b #server 
+docker network connect --ip 1.2.3.5 my-net 9f4ee37c8424 #client
+
+
