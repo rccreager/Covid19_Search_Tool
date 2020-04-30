@@ -20,6 +20,5 @@ RUN python3 -c "import nltk; nltk.download('wordnet')"
 RUN wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
 RUN unzip uncased_L-12_H-768_A-12.zip
 RUN pip3 install bert-serving-server==1.10 --no-deps
+RUN pip3 install bert-serving-client==1.10.0
 RUN rm uncased_L-12_H-768_A-12.zip
-
-

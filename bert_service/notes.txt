@@ -1,0 +1,2 @@
+start server like so:
+docker run -it -p 1111:5555 -p 2222:5556 --network my-net covid19-search-tool:29apr_1721_bert  2

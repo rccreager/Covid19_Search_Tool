@@ -11,6 +11,7 @@ import logging
 
 # NLP libraries
 import nltk
+from bert_serving.client import BertClient
 
 # Import Tensorflow libraries 
 import tensorflow as tf
@@ -28,6 +29,9 @@ if src_dir not in sys.path:
 # Import local libraries
 from utils import ResearchPapers
 from nlp import SearchResults, WordTokenIndex, preprocess
-from bert import get_bert_vectorizer
 
-bert_vectorizer, bert_feature_names = get_bert_vectorizer()
+from bert_serving.client import BertClient
+print('getting client')
+with BertClient(ip='172.18.0.2', timeout=50000) as bc:
+    print('encode')
+    bc.encode(['First do it', 'then do it right', 'then do it better'])
