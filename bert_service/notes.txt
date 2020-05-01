@@ -7,7 +7,7 @@ start server like so:
 ## client container ID
 
 # first start server
-docker run -it covid19-search-tool:29apr_1721_bert
+docker run -it -runtime nvidia covid19-search-tool:29apr_1721_bert 4 40
 # then main
 docker run -it covid19-search-tool:29apr_1610_main
 

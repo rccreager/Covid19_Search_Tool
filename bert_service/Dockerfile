@@ -10,7 +10,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip3 install --upgrade pip 
 RUN pip3 install bert-serving-server==1.10 
 RUN pip3 install bert-serving-client==1.10.0
-RUN pip3 install tensorflow==1.15
+RUN pip3 install tensorflow-gpu==1.15.2
 
 RUN wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
 RUN unzip uncased_L-12_H-768_A-12.zip

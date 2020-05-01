@@ -10,16 +10,14 @@ if src_dir not in sys.path:
 # Import local libraries
 from nlp import get_preprocessed_abstract_text 
 
-def create_bert_embeddings(data_path, data_file_name, output_name, server_ip, is_tokenized) 
+def create_bert_embeddings(data_path, data_file_name, output_name, server_ip, is_tokenized): 
     print('getting text')
     preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
     print(preprocessed[0])
     print('getting client')
-    with BertClient(ip = '1.2.4.8', timeout='10000') as bc:
+    with BertClient(ip = '1.2.4.8', timeout=10000) as bc:
         print('encoding')
-        bc.encode(preprocessed, is_tokenized=is_tokenized)
-        print('fetching')
-        bert_vectors = fetch_all(sort=True, concat=True)
+        bert_vectors = bc.encode(preprocessed, is_tokenized=is_tokenized)
         with open(output_name, 'w') as output_file:
             output_file.writelines("%s\n" % vector for vector in bert_vectors)
     return output_name
