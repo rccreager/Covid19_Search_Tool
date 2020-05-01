@@ -30,15 +30,3 @@ if src_dir not in sys.path:
 from utils import ResearchPapers
 from nlp import SearchResults, WordTokenIndex, preprocess
 
-#BERT server
-from bert_serving.client import BertClient
-
-print('getting text')
-preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
-print(preprocessed[0])
-print('getting client')
-with BertClient(ip = '1.2.4.8') as bc:
-    print('encoding')
-    bc.encode(preprocessed, is_tokenized=False)
-print('fetching')
-bert_vectors = bc.fetch_all(sort=True)

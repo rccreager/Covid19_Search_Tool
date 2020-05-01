@@ -6,12 +6,16 @@ start server like so:
 ## server container ID
 ## client container ID
 
-
-docker run -it covid19-search-tool:29apr_1721_bert 2
+# first start server
+docker run -it covid19-search-tool:29apr_1721_bert
+# then main
 docker run -it covid19-search-tool:29apr_1610_main
 
+#create network
 docker network create my-net --gateway=1.2.3.4 --subnet=1.2.3.4/11
-docker network connect --ip 1.2.4.8 my-net 5b68b9a6f10b #server 
-docker network connect --ip 1.2.3.5 my-net 9f4ee37c8424 #client
+# add server to network with unique ip address
+docker network connect --ip 1.2.4.8 my-net 5b68b9a6f10b 
+# add client to network
+docker network connect my-net 9f4ee37c8424
 
 
