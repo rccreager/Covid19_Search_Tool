@@ -33,7 +33,7 @@ To get the BERT embeddings, you'll need to start up a second Docker container on
 
         docker run -it --runtime nvidia rccreager/covid19-search-tool:latest-bert-server 1 40 
 
-Give it a little time to build the graph and start the server. You know it's working when you see a line like: "I:WORKER-0:[\_\_i:gen:559]:ready and listening!".
+Give it a little time to build the graph and start the server. You know it's working when you see a line like: "I:VENTILATOR:[\_\_i:\_ru:164]:all set, ready to serve request!"
 
 Explanation of the command line flags:
 
