@@ -31,14 +31,14 @@ To get the BERT embeddings, you'll need to start up a second Docker container on
         docker pull rccreager/covid19-search-tool:latest-bert-server
 2. Run the server image: 
 
-        docker run -it -runtime nvidia rccreager/covid19-search-tool:latest-bert-server 1 40 
+        docker run -it --runtime nvidia rccreager/covid19-search-tool:latest-bert-server 1 40 
 
 Give it a little time to build the graph and start the server. You know it's working when you see a line like: "I:WORKER-0:[\_\_i:gen:559]:ready and listening!".
 
 Explanation of the command line flags:
 
 The `-it` flag makes this container interactive and uses TTY to make a pseudo-terminal for you.
-The `-runtime nvidia` flag enables GPU usage for this container. 
+The `--runtime nvidia` flag enables GPU usage for this container. 
 The `1` is a command line option (for the number of BERT server workers) to the `bert_service/entrypoint.sh` script running in this container.
 The `40` is another command line option for `bert_service/entrypoint.sh` (for the maximum BERT sequence length).
 
