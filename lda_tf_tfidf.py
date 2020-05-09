@@ -23,7 +23,7 @@ if data_dir not in sys.path:
 from utils import ResearchPapers
 from nlp import SearchResults, WordTokenIndex, preprocess, get_preprocessed_abstract_text, print_top_words
 
-preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
+preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv', tokenize_text = True)
 english_stopwords = list(set(stopwords.words('english')))
 
 tf_vectorizer = CountVectorizer(min_df=3, max_df=0.1, stop_words=english_stopwords)

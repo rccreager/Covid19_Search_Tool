@@ -57,15 +57,12 @@ Once you have those IDs, add both containers to the network, substituting in you
         docker network connect --ip 1.2.4.8 my-net ID-NUMBER-OF-SERVER
         docker network connect my-net ID-NUMBER-OF-CLIENT
 
-4. Finally, you can either run the embeddings and save them to a CSV for later use: 
+4. For now, you can either run the embeddings and save them to a CSV for later use: 
 
         python3 create_bert_embeddings.py 
 
-Or, you can run LDA by running these embeddings:
-
-        python3 lda_bert.py 
-
 **TO-DO:** 
+- The embeddings through bert-as-service contain negative values and are not accepted by sklearn's LDA tool. Perhaps switching to HuggingFace's BERT tools could fix this (find a working BERT vectorization + LDA topic modeling example?)
 - Check if embedding CSV already found and read in. 
 - Try HuggingFace BERT tools for faster embedding (is BERT-service actually using the GPU properly?). 
 - Try more appropraite existing embeddings or retrain the embeddings using a more appropriate corpus.  

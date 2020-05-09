@@ -23,15 +23,13 @@ if data_dir not in sys.path:
 # Import local libraries
 from utils import ResearchPapers
 from nlp import SearchResults, WordTokenIndex, preprocess, get_preprocessed_abstract_text, print_top_words
-from bert import get_bert_vectorizer
-from bert_utils import get_feed_dict
 
 preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
 
 # TO-DO: add optional loading of existing CSV embedding files
 with BertClient(ip = '1.2.4.8') as bc:
     print('encoding...if client hangs, make sure you can have set up and can connect to server')
-    bert_vectors = bc.encode(preprocessed, is_tokenized=is_tokenized)
+    bert_vectors = bc.encode(preprocessed, is_tokenized=False)
 
 lda_bert = LatentDirichletAllocation(n_components = 3, learning_offset = 50., verbose=2)
 t0 = time()
