@@ -19,7 +19,7 @@ You can now run `lda_tf_tfidf.py` to run Latent Dirichlet Allocation model with 
 
 If you want to run Jupyter in this container and make it accessible for viewing notebooks locally, you need to include the flag: `-p 8888:8888`
 
-TO-DO:    
+**TO-DO:** Check sensitivity of topics to initial random seeding. Check if some abstracts are in Spanish -- we sometimes get clusters of Spanish articles ('la', 'los'); how can we filter out non-English text?    
 
 #### Optional: Use BERT embeddings
 
@@ -37,8 +37,8 @@ Explanation of the command line flags:
 
 The `-it` flag makes this container interactive and uses TTY to make a pseudo-terminal for you.
 The `-runtime nvidia` flag enables GPU usage for this container. 
-The `1` is a command line option (for the number of BERT server workers) to the `create_bert_embeddings.py` script run in this container.
-The `40` is another command line option (for the maximum BERT sequence length).
+The `1` is a command line option (for the number of BERT server workers) to the `bert_service/entrypoint.sh` script running in this container.
+The `40` is another command line option for `bert_service/entrypoint.sh` (for the maximum BERT sequence length).
 
 3. To allow the BERT client in the main docker container to access the BERT server container, we must add them to the same Docker network and set the server IP address:
 
@@ -56,8 +56,13 @@ Once you have those IDs, add both containers to the network, substituting in you
 
 4. Finally, you can either run the embeddings and save them to a CSV for later use: 
 
-        python3
+        python3 create_bert_embeddings.py 
 
+Or, you can run LDA by running these embeddings:
+
+        python3 lda_bert.py 
+
+**TO-DO:** Check if embedding CSV already found and read in. Try HuggingFace BERT tools for faster embedding (is BERT-service actually using the GPU properly?) 
 
 #### Optional: Start Jupyter from Main Container
 
