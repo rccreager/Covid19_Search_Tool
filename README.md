@@ -19,8 +19,9 @@ You should now be "inside" the main Docker container at the command line and can
 
 Note that you only need the `-p 8888:8888` flag in the docker run command if you plan to use Jupyter from within this container later.
 
-**TO-DO:** Check sensitivity of topics to initial random seeding. \
-Check if some abstracts are in Spanish -- we sometimes get clusters of Spanish articles ('la', 'los'); how can we filter out non-English text? \ 
+**TO-DO:**
+- Check sensitivity of topics to initial random seeding. 
+- Check if some abstracts are in Spanish -- we sometimes get clusters of Spanish articles ('la', 'los'); how can we filter out non-English text? 
 
 #### Optional: Use BERT embeddings
 
@@ -63,10 +64,11 @@ Or, you can run LDA by running these embeddings:
 
         python3 lda_bert.py 
 
-**TO-DO:** Check if embedding CSV already found and read in. \ 
-Try HuggingFace BERT tools for faster embedding (is BERT-service actually using the GPU properly?). \ 
-Try more appropraite existing embeddings or retrain the embeddings using a more appropriate corpus. \ 
-Create word cloud visualizations during embedding. User BERT embeddings in BM25 search tool. 
+**TO-DO:** 
+- Check if embedding CSV already found and read in. 
+- Try HuggingFace BERT tools for faster embedding (is BERT-service actually using the GPU properly?). 
+- Try more appropraite existing embeddings or retrain the embeddings using a more appropriate corpus.  
+- Create word cloud visualizations during embedding. User BERT embeddings in BM25 search tool. 
 
 #### Optional: Start Jupyter from Main Container
 
