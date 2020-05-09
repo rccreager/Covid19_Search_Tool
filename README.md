@@ -7,44 +7,75 @@
 
 The easiest way to run this package is with Docker.
 1. Install [Docker](https://docs.docker.com/install/)
-2. Pull the Docker image from Docker Hub:
+2. Pull the main Docker image (optional: pull the BERT serving container) from Docker Hub:
 
-        docker pull rccreager/covid19-search-tool:latest 
-3. Run the Docker image:
+        docker pull rccreager/covid19-search-tool:latest-main 
+        (Optional) docker pull rccreager/covid19-search-tool:latest-bert-server
+3. Run the main Docker image (optional: run the BERT serving container):
 
-        docker run -it -p 8888:8888 rccreager/covid19-search-tool:Covid19_Search_Tool_03-25-20 
-4. (Optional) Start Jupyter from inside the docker image:
+        docker run -it rccreager/covid19-search-tool:latest-main
+
+You can now run `lda_tf_tfidf.py` to run Latent Dirichlet Allocation model with TF and TF-IDF embeddings!
+
+If you want to run Jupyter in this container and make it accessible for viewing notebooks locally, you need to include the flag: `-p 8888:8888`
+
+TO-DO:    
+
+#### Optional: Use BERT embeddings
+
+To get the BERT embeddings, you'll need to start up a second Docker container on the same machine and network it with the main container.
+1. Pull the server Docker image from Docker Hub:
+
+        docker pull rccreager/covid19-search-tool:latest-bert-server
+2. Run the server image: 
+
+        docker run -it -runtime nvidia rccreager/covid19-search-tool:latest-bert-server 1 40 
+
+Give it a little time to build the graph and start the server. You know it's working when you see a line like: "I:WORKER-0:[\_\_i:gen:559]:ready and listening!".
+
+Explanation of the command line flags:
+
+The `-it` flag makes this container interactive and uses TTY to make a pseudo-terminal for you.
+The `-runtime nvidia` flag enables GPU usage for this container. 
+The `1` is a command line option (for the number of BERT server workers) to the `create_bert_embeddings.py` script run in this container.
+The `40` is another command line option (for the maximum BERT sequence length).
+
+3. To allow the BERT client in the main docker container to access the BERT server container, we must add them to the same Docker network and set the server IP address:
+
+First, create the network:
+        docker network create my-net --gateway=1.2.3.4 --subnet=1.2.3.4/11
+        
+Next, find the network ID of the server and client container by listing all Docker containers running on the machine:
+        
+        docker container ls 
+
+Once you have those IDs, add both containers to the network, substituting in your container IDs. You only need to set an IP address for the server:
+
+        docker network connect --ip 1.2.4.8 my-net ID-NUMBER-OF-SERVER
+        docker network connect my-net ID-NUMBER-OF-CLIENT
+
+4. Finally, you can either run the embeddings and save them to a CSV for later use: 
+
+        python3
+
+
+#### Optional: Start Jupyter from Main Container
+
+This assumes you've pulled and are running the main Docker container from the instructions at the top.
+1. Start Jupyter from inside the main Docker container:
 
         jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
-5. (Optional) Open Jupyter on your local machine by copy-pasting the printed address into a web brower. It will look something like:
+2. Open Jupyter on your local machine by copy-pasting the printed address into a web brower. It will look something like:
 
         http://127.0.0.1:8888/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 ### Building Yourself:
 
-- Visit [COVID-19 Open Research Dataset Challenge (CORD-19)](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge) and download the data (requires Kaggle account)
-- Clone this [repository](https://github.com/mrubash1/Covid19_Search_Tool), move the data to Covid19_Search_Tool/data, and unzip the files
-- build the attached conda environment
-```bash
-conda create --name cord19 python=3.6.9
-source activate cord19
-pip install -r requirements.txt
-~/.profile
-```
-- Dowload the NLTK packages for text processing and search
-```bash
-python -m nltk.downloader punkt
-python -m nltk.downloader stopwords
-python -m nltk.downloader wordnet
-```
-- Downloading the BERT model by going to Covid_Search_Tool/models
-```bash
-wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
-unzip uncased_L-12_H-768_A-12.zip
-pip install bert-serving-server==1.10 --no-deps
-rm uncased_L-12_H-768_A-12.zip
- ```   
+Please view the Dockerfiles in the main repo and within the `bert_service` repo to see precisely how to build yourself.
 
+To get the dataset itself (stored here via git LFS):
+- Visit [COVID-19 Open Research Dataset Challenge (CORD-19)](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge) and download the data (requires Kaggle account)
+- Clone this [repository](https://github.com/rccreager/Covid19_Search_Tool), move the data to Covid19_Search_Tool/data, and unzip the files
 
 
 ## Interactive visualization of COVID-19 related academic articles

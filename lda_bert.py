@@ -28,35 +28,10 @@ from bert_utils import get_feed_dict
 
 preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
 
-
-#tf_vectorizer = CountVectorizer(min_df=3, max_df=0.1, stop_words=english_stopwords)
-#tf_vectors = tf_vectorizer.fit_transform(preprocessed)
-#lda_tf = LatentDirichletAllocation(n_components = 3, learning_offset = 50., verbose=2)
-#t0 = time()
-#lda_tf.fit(tf_vectors)
-#print("TF: done in %0.3fs" % (time() - t0))
-#tf_feature_names = tf_vectorizer.get_feature_names()
-#print('Topics from LDA using term frequency (TF):')
-#print_top_words(lda_tf, tf_feature_names, 25)
-
-#tfidf_vectorizer = TfidfVectorizer()
-#tfidf_vectors = tfidf_vectorizer.fit_transform(preprocessed)
-#lda_tfidf = LatentDirichletAllocation(n_components = 3, learning_offset = 50., verbose=2)
-#t0 = time()
-#lda_tfidf.fit(tfidf_vectors)
-#print("TFIDF: done in %0.3fs" % (time() - t0))
-#tfidf_feature_names = tfidf_vectorizer.get_feature_names()
-#print('Topics from LDA using TF-IDF:')
-#print_top_words(lda_tfidf, tfidf_feature_names, 25)
-
-preprocessed = get_preprocessed_abstract_text('data/CORD-19-research-challenge/', 'metadata.csv')
-print(preprocessed[0])
-print('getting client')
+# TO-DO: add optional loading of existing CSV embedding files
 with BertClient(ip = '1.2.4.8') as bc:
-    print('encoding')
-    bc.encode(preprocessed, is_tokenized=False)
-print('fetching')
-bert_vectors = bc.fetch_all(sort=True)
+    print('encoding...if client hangs, make sure you can have set up and can connect to server')
+    bert_vectors = bc.encode(preprocessed, is_tokenized=is_tokenized)
 
 lda_bert = LatentDirichletAllocation(n_components = 3, learning_offset = 50., verbose=2)
 t0 = time()
