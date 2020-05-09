@@ -1,5 +1,4 @@
 # Covid19_Search_Tool
-[Active colab notebook](https://colab.research.google.com/drive/1aFxUJgP1GeMqqw3bUDQIzoYIaYHWKCAr) : Resources for working with CORD19 (Novel Coronovirus 2019) NLP dataset - 
 
 ## Getting started
 
@@ -7,19 +6,21 @@
 
 The easiest way to run this package is with Docker.
 1. Install [Docker](https://docs.docker.com/install/)
-2. Pull the main Docker image (optional: pull the BERT serving container) from Docker Hub:
+2. Pull the main Docker image from Docker Hub:
 
         docker pull rccreager/covid19-search-tool:latest-main 
-        (Optional) docker pull rccreager/covid19-search-tool:latest-bert-server
-3. Run the main Docker image (optional: run the BERT serving container):
+3. Run the main Docker image:
 
-        docker run -it rccreager/covid19-search-tool:latest-main
+        docker run -it -p 8888:8888 rccreager/covid19-search-tool:latest-main
 
-You can now run `lda_tf_tfidf.py` to run Latent Dirichlet Allocation model with TF and TF-IDF embeddings!
+You should now be "inside" the main Docker container at the command line and can now run a Latent Dirichlet Allocation model with TF and TF-IDF embeddings:
 
-If you want to run Jupyter in this container and make it accessible for viewing notebooks locally, you need to include the flag: `-p 8888:8888`
+        python3 lda_tf_tfidf.py 
 
-**TO-DO:** Check sensitivity of topics to initial random seeding. Check if some abstracts are in Spanish -- we sometimes get clusters of Spanish articles ('la', 'los'); how can we filter out non-English text?    
+Note that you only need the `-p 8888:8888` flag in the docker run command if you plan to use Jupyter from within this container later.
+
+**TO-DO:** Check sensitivity of topics to initial random seeding. \
+Check if some abstracts are in Spanish -- we sometimes get clusters of Spanish articles ('la', 'los'); how can we filter out non-English text? \ 
 
 #### Optional: Use BERT embeddings
 
@@ -62,7 +63,10 @@ Or, you can run LDA by running these embeddings:
 
         python3 lda_bert.py 
 
-**TO-DO:** Check if embedding CSV already found and read in. Try HuggingFace BERT tools for faster embedding (is BERT-service actually using the GPU properly?) 
+**TO-DO:** Check if embedding CSV already found and read in. \ 
+Try HuggingFace BERT tools for faster embedding (is BERT-service actually using the GPU properly?). \ 
+Try more appropraite existing embeddings or retrain the embeddings using a more appropriate corpus. \ 
+Create word cloud visualizations during embedding. User BERT embeddings in BM25 search tool. 
 
 #### Optional: Start Jupyter from Main Container
 
@@ -74,6 +78,7 @@ This assumes you've pulled and are running the main Docker container from the in
 
         http://127.0.0.1:8888/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
+You can now navigate to the notebooks folder to run the BM25 notebook or add more notebooks yourself!
 ### Building Yourself:
 
 Please view the Dockerfiles in the main repo and within the `bert_service` repo to see precisely how to build yourself.
@@ -82,6 +87,10 @@ To get the dataset itself (stored here via git LFS):
 - Visit [COVID-19 Open Research Dataset Challenge (CORD-19)](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge) and download the data (requires Kaggle account)
 - Clone this [repository](https://github.com/rccreager/Covid19_Search_Tool), move the data to Covid19_Search_Tool/data, and unzip the files
 
+
+
+## Backup resources
+[Active colab notebook](https://colab.research.google.com/drive/1aFxUJgP1GeMqqw3bUDQIzoYIaYHWKCAr) : Resources for working with CORD19 (Novel Coronovirus 2019) NLP dataset -
 
 ## Interactive visualization of COVID-19 related academic articles
 ![Alt text](img/CORD19_Bert_Embeddings_6000_articles_in_top_journals.png?raw=true "CORD19_Bert_Embeddings_6000_articles_in_top_journals.png")
