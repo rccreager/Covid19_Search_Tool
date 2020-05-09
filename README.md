@@ -83,7 +83,7 @@ This assumes you've pulled and are running the main Docker container from the in
 You can now navigate to the notebooks folder to run the BM25 notebook or add more notebooks yourself!
 ### Building Yourself:
 
-Please view the Dockerfiles in the main repo and within the `bert_service` repo to see precisely how to build yourself.
+Please view the Dockerfiles in the main repo and within the `bert_service` directory to see precisely how to build yourself.
 
 To get the dataset itself (stored here via git LFS):
 - Visit [COVID-19 Open Research Dataset Challenge (CORD-19)](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge) and download the data (requires Kaggle account)
