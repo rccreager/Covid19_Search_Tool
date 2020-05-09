@@ -45,6 +45,7 @@ The `40` is another command line option for `bert_service/entrypoint.sh` (for th
 3. To allow the BERT client in the main docker container to access the BERT server container, we must add them to the same Docker network and set the server IP address:
 
 First, create the network:
+        
         docker network create my-net --gateway=1.2.3.4 --subnet=1.2.3.4/11
         
 Next, find the network ID of the server and client container by listing all Docker containers running on the machine:
